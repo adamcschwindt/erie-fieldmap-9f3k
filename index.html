@@ -15,6 +15,8 @@
     font: 14px -apple-system, system-ui, sans-serif;
     box-shadow: 0 1px 4px rgba(0,0,0,.35);
   }
+  #hdr a { color: #1a73e8; text-decoration: none; margin-left: 8px; font-size: 13px; }
+  #hdr a:hover { text-decoration: underline; }
   #loc {
     position: absolute; z-index: 1000; right: 10px; bottom: 24px;
     width: 44px; height: 44px; border: 0; border-radius: 50%;
@@ -36,7 +38,7 @@
 </style>
 </head>
 <body>
-<div id="hdr">Not in OTM: <b id="cnt">&hellip;</b></div>
+<div id="hdr">Not in OTM: <b id="cnt">&hellip;</b><a href="https://docs.google.com/spreadsheets/d/1FWJ2ekBBl_ni-3kiYxvYWLFQZFabm5j2G80sSFZXB84/edit" target="_blank" rel="noopener">Open sheet</a></div>
 <div id="legend"></div>
 <button id="loc" title="Center on me">&#9678;</button>
 <div id="map"></div>
