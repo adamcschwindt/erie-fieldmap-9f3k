@@ -1,59 +1,115 @@
 <!DOCTYPE html>
-  <html>
-  <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Erie - Not in OTM</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <style>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Erie &mdash; Not in OTM</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
   html, body { height: 100%; margin: 0; }
-#map { position: absolute; inset: 0; }
-#hdr { position: absolute; z-index: 1000; top: 8px; left: 8px; background: #fff; padding: 6px 10px; border-radius: 6px; font: 14px -apple-system, system-ui, sans-serif; box-shadow: 0 1px 4px rgba(0,0,0,.35); }
-#loc { position: absolute; z-index: 1000; right: 10px; bottom: 24px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #1a73e8; color: #fff; font-size: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.4); cursor: pointer; }
+  #map { position: absolute; inset: 0; }
+  #hdr {
+    position: absolute; z-index: 1000; top: 8px; left: 8px;
+    background: #fff; padding: 6px 10px; border-radius: 6px;
+    font: 14px -apple-system, system-ui, sans-serif;
+    box-shadow: 0 1px 4px rgba(0,0,0,.35);
+  }
+  #loc {
+    position: absolute; z-index: 1000; right: 10px; bottom: 24px;
+    width: 44px; height: 44px; border: 0; border-radius: 50%;
+    background: #1a73e8; color: #fff; font-size: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.4); cursor: pointer;
+  }
+  #legend {
+    position: absolute; z-index: 1000; top: 8px; right: 8px;
+    background: #fff; padding: 8px 10px; border-radius: 6px;
+    font: 13px -apple-system, system-ui, sans-serif;
+    box-shadow: 0 1px 4px rgba(0,0,0,.35);
+    max-height: 40vh; overflow-y: auto; display: none;
+  }
+  #legend .dot {
+    display: inline-block; width: 11px; height: 11px; border-radius: 50%;
+    margin-right: 6px; border: 1px solid rgba(0,0,0,.25);
+  }
+  #legend .row { display: flex; align-items: center; margin: 3px 0; white-space: nowrap; }
 </style>
-  </head>
-  <body>
-  <div id="hdr">Not in OTM: <b id="cnt">...</b></div>
+</head>
+<body>
+<div id="hdr">Not in OTM: <b id="cnt">&hellip;</b></div>
+<div id="legend"></div>
 <button id="loc" title="Center on me">&#9678;</button>
-  <div id="map"></div>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-  var FEED = "https://script.google.com/macros/s/AKfycbxjbqtwg_2kKqNrzJAkW7aRtPXas2jvjetyaCMS87TzsbwrFXCTXLXcA9cpQaC3FaAe/exec";
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// The data feed from your Apps Script (Verified?-blank addresses, live).
+var FEED = "https://script.google.com/macros/s/AKfycbxjbqtwg_2kKqNrzJAkW7aRtPXas2jvjetyaCMS87TzsbwrFXCTXLXcA9cpQaC3FaAe/exec";
+
 var map = L.map('map').setView([42.12, -80.08], 11);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
 var pinLayer = L.layerGroup().addTo(map);
 var fitted = false;
+
+// Called by the JSONP feed each refresh. Pins with an "Assigned" name in the
+// sheet (p.as/p.col) render as a colored dot matching that row's highlight;
+// unassigned pins stay the default blue map pin.
 window.gotPins = function (pins) {
-pinLayer.clearLayers();
-var bounds = [];
-pins.forEach(function (p) {
-  var dir = 'https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng;
-var html = '<b>' + p.a + '</b><br>' + (p.b || '') + (p.s ? '<br><i>' + p.s + '</i>' : '') + '<br><a href="' + dir + '" target="_blank" rel="noopener">Directions</a>';
-L.marker([p.lat, p.lng]).addTo(pinLayer).bindPopup(html);
-bounds.push([p.lat, p.lng]);
-});
-document.getElementById('cnt').textContent = pins.length;
-if (bounds.length && !fitted) { map.fitBounds(bounds, { padding: [30, 30] }); fitted = true; }
+  pinLayer.clearLayers();
+  var bounds = [];
+  var legend = {};
+  pins.forEach(function (p) {
+    var dir = 'https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng;
+    var assignedLine = p.as ? ('<br><b>Assigned:</b> ' + p.as) : '';
+    var html = '<b>' + p.a + '</b><br>' + (p.b || '') +
+      (p.s ? '<br><i>' + p.s + '</i>' : '') + assignedLine +
+      '<br><a href="' + dir + '" target="_blank" rel="noopener">Directions</a>';
+    var marker;
+    if (p.col) {
+      marker = L.circleMarker([p.lat, p.lng],
+        { radius: 9, weight: 2, color: '#333', fillColor: p.col, fillOpacity: 0.9 });
+      if (p.as) { legend[p.as] = p.col; }
+    } else {
+      marker = L.marker([p.lat, p.lng]);
+    }
+    marker.addTo(pinLayer).bindPopup(html);
+    bounds.push([p.lat, p.lng]);
+  });
+  document.getElementById('cnt').textContent = pins.length;
+  renderLegend(legend);
+  if (bounds.length && !fitted) { map.fitBounds(bounds, { padding: [30, 30] }); fitted = true; }
 };
+
+function renderLegend(byName) {
+  var el = document.getElementById('legend');
+  var names = Object.keys(byName).sort();
+  if (!names.length) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.innerHTML = names.map(function (n) {
+    return '<div class="row"><span class="dot" style="background:' + byName[n] + ';"></span>' + n + '</div>';
+  }).join('');
+}
+
+// Load (and reload) the feed via JSONP so it stays current.
 function load() {
   var s = document.createElement('script');
-s.src = FEED + '?callback=gotPins&t=' + Date.now();
-document.body.appendChild(s);
-setTimeout(function () { s.remove(); }, 15000);
+  s.src = FEED + '?callback=gotPins&t=' + Date.now();
+  document.body.appendChild(s);
+  setTimeout(function () { s.remove(); }, 15000);
 }
 load();
-setInterval(load, 60000);
+setInterval(load, 60000); // refresh every 60 seconds
+
+// "You are here" blue dot (works because this is a normal hosted page).
 var me = null;
 if (navigator.geolocation) {
-navigator.geolocation.watchPosition(function (pos) {
-  var ll = [pos.coords.latitude, pos.coords.longitude];
-if (me) { me.setLatLng(ll); }
-else { me = L.circleMarker(ll, { radius: 8, color: '#1a73e8', fillColor: '#1a73e8', fillOpacity: 1 }).addTo(map).bindPopup('You are here'); }
-}, function () {}, { enableHighAccuracy: true });
+  navigator.geolocation.watchPosition(function (pos) {
+    var ll = [pos.coords.latitude, pos.coords.longitude];
+    if (me) { me.setLatLng(ll); }
+    else { me = L.circleMarker(ll, { radius: 8, color: '#1a73e8', fillColor: '#1a73e8', fillOpacity: 1 }).addTo(map).bindPopup('You are here'); }
+  }, function () {}, { enableHighAccuracy: true });
 }
 document.getElementById('loc').onclick = function () { if (me) { map.setView(me.getLatLng(), 14); } };
 </script>
-  </body>
-  </html>
-  
+</body>
+</html>
