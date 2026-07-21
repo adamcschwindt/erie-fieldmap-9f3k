@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Erie Nepali Outreach &mdash; Quick Guide</title>
+<style>
+  :root {
+    --paper: #f2eee4;
+    --paper-raised: #ece6d6;
+    --ink: #2b2a26;
+    --ink-soft: #6b6656;
+    --accent: #8a3b2b;
+    --accent-soft: #b9614a;
+    --pine: #2f5d50;
+    --line: #d9d0bc;
+    --radius: 3px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #211f1a;
+      --paper-raised: #2a2721;
+      --ink: #ece7d9;
+      --ink-soft: #b3ab93;
+      --accent: #e08a6f;
+      --accent-soft: #c96b4f;
+      --pine: #6fae9b;
+      --line: #433e33;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 48px 28px 64px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pine);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-family: Iowan Old Style, "Palatino Linotype", Palatino, Georgia, serif;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+    color: var(--ink);
+    text-wrap: balance;
+    max-width: 22ch;
+  }
+
+  .dek {
+    font-size: 17px;
+    color: var(--ink-soft);
+    margin: 0;
+    max-width: 60ch;
+  }
+
+  .masthead {
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 32px;
+  }
+
+  h2 {
+    font-family: Iowan Old Style, "Palatino Linotype", Palatino, Georgia, serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: -0.005em;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  section {
+    padding: 26px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  p { margin: 0 0 12px; max-width: 62ch; }
+  p:last-child { margin-bottom: 0; }
+
+  ul { margin: 0; padding: 0; list-style: none; }
+  li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
+    max-width: 62ch;
+  }
+  li:last-child { margin-bottom: 0; }
+  li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--accent-soft);
+  }
+
+  strong { font-weight: 600; }
+
+  a {
+    color: var(--accent);
+    text-decoration-color: var(--accent-soft);
+    text-underline-offset: 2px;
+  }
+  a:hover { color: var(--accent-soft); }
+  a:focus-visible { outline: 2px solid var(--pine); outline-offset: 2px; border-radius: 2px; }
+
+  .resources {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 4px;
+  }
+  @media (max-width: 520px) {
+    .resources { grid-template-columns: 1fr; }
+  }
+
+  .resource {
+    display: block;
+    padding: 16px 18px;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    text-decoration: none;
+  }
+  .resource:hover { border-color: var(--accent-soft); }
+  .resource .kind {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .resource .name {
+    display: block;
+    font-family: Iowan Old Style, "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .resource .name::after { content: " &rarr;"; color: var(--accent); }
+
+  .swatchline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 14px 0 4px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .dot {
+    width: 11px; height: 11px; border-radius: 50%;
+    border: 1px solid rgba(0,0,0,.2);
+    flex-shrink: 0;
+  }
+
+  .recap {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .recap h2 { margin-bottom: 14px; }
+  .recap ol {
+    margin: 0; padding: 0; list-style: none;
+    counter-reset: step;
+  }
+  .recap li {
+    counter-increment: step;
+    padding-left: 30px;
+    margin-bottom: 12px;
+  }
+  .recap li:last-child { margin-bottom: 0; }
+  .recap li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: -1px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--pine);
+    color: var(--paper);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  footer {
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  footer p { max-width: 62ch; }
+
+  @media print {
+    body { background: #fff; }
+    .sheet { max-width: none; padding: 0; }
+    a { color: var(--ink); text-decoration: underline; }
+    .resource { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="masthead">
+    <p class="eyebrow">Erie &middot; Territory Outreach</p>
+    <h1>Finding Nepali-speaking families not yet in our records</h1>
+    <p class="dek">A short guide to the list and map, for anyone going out in this territory.</p>
+  </div>
+
+  <section>
+    <h2>What this is</h2>
+    <p>
+      Each week, a tool checks recent home sales in Erie County for buyers with
+      Nepali surnames, and compares that list against our territory records.
+      Anyone who bought a home but isn't in our records yet shows up here &mdash;
+      so we can go find them.
+    </p>
+    <p>
+      It updates on its own. New families appear automatically; nobody needs
+      to maintain the list by hand.
+    </p>
+  </section>
+
+  <section>
+    <h2>The two resources</h2>
+    <p>They're linked to each other &mdash; a click on either takes you to the other.</p>
+    <div class="resources">
+      <a class="resource" href="https://docs.google.com/spreadsheets/d/1FWJ2ekBBl_ni-3kiYxvYWLFQZFabm5j2G80sSFZXB84/edit" target="_blank" rel="noopener">
+        <span class="kind">Spreadsheet</span>
+        <span class="name">The List</span>
+      </a>
+      <a class="resource" href="https://adamcschwindt.github.io/erie-fieldmap-9f3k/" target="_blank" rel="noopener">
+        <span class="kind">Live map</span>
+        <span class="name">The Map</span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Using the map in the field</h2>
+    <ul>
+      <li>Every pin is a family not yet in our records. Tap a pin for the address, the buyer's name, and their likely family name.</li>
+      <li>Tap <strong>Directions</strong> in the popup for turn-by-turn directions from right where you're standing.</li>
+      <li>A blue dot shows where you are, so it's easy to use while you're actually out.</li>
+      <li>The map refreshes itself about once a minute &mdash; no need to reload it.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Claiming an address, so nobody doubles up</h2>
+    <p>
+      Before you head out, you can mark an address as yours in the
+      <strong>Assigned</strong> column of the list:
+    </p>
+    <ul>
+      <li>Find the address and type your name in the Assigned column.</li>
+      <li>That row turns a color &mdash; and the pin for that address turns the same color on the map.</li>
+      <li>Anyone glancing at either the list or the map can see at once who's already planning a visit where.</li>
+      <li>Plans changed? Just clear your name from the cell and the color clears with it.</li>
+    </ul>
+    <div class="swatchline">
+      <span class="dot" style="background:#e6194b"></span>
+      <span>Example: once "Bikash" is assigned, his rows and pins share one color &mdash; his own, automatically.</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>After a visit</h2>
+    <p>
+      Once a family is added to our territory or confirmed as already known,
+      mark <strong>Verified?</strong> in the list. The address then drops off
+      the map and the list on its own &mdash; nothing else to update, and nobody
+      else will be sent there again.
+    </p>
+  </section>
+
+  <section class="recap">
+    <h2>In short</h2>
+    <ol>
+      <li>Open the map or the list before heading out.</li>
+      <li>Pick an address, type your name under Assigned to claim it.</li>
+      <li>Use Directions to get there.</li>
+      <li>Mark Verified? once it's added to the territory or confirmed known.</li>
+    </ol>
+  </section>
+
+  <footer>
+    <p>Questions, or an address that looks off? Reach out to Adam.</p>
+  </footer>
+
+</div>
+</body>
+</html>
